@@ -1,7 +1,7 @@
 # ─────────────────────────────────────────────
 # Stage 1: Dependencies
 # ─────────────────────────────────────────────
-FROM node:18-slim AS deps
+FROM node:20-slim AS deps
 
 WORKDIR /app
 
@@ -27,7 +27,7 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 # ─────────────────────────────────────────────
 # Stage 2: Runner
 # ─────────────────────────────────────────────
-FROM node:18-slim AS runner
+FROM node:20-slim AS runner
 
 WORKDIR /app
 
