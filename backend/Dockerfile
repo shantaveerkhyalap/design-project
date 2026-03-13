@@ -22,7 +22,7 @@ RUN npm ci --only=production
 COPY requirements.txt ./
 # Using --no-cache-dir to keep image size slightly smaller
 # Note: This will build/install TensorFlow which is very large
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt --break-system-packages
 
 # ─────────────────────────────────────────────
 # Stage 2: Runner
