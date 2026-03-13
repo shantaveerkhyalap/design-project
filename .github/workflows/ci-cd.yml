@@ -257,11 +257,6 @@ jobs:
       - name: Update Kubernetes manifests
         env:
           IMAGE_TAG: ${{ needs.docker.outputs.image_tag }}
-          # Injects real secrets from GitHub into the environment for substitution
-          MONGO_URI: ${{ secrets.MONGO_URI }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
         run: |
           # GHCR requires lowercase repository names
           REPO_LOWER=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
@@ -273,13 +268,9 @@ jobs:
           
           sed -i "s|^\(\s*image:\s*\).*|\1${BACKEND_IMG}|g" kubernetes/backend-deployment.yml
           sed -i "s|^\(\s*image:\s*\).*|\1${FRONTEND_IMG}|g" kubernetes/frontend-deployment.yml
-          
-          # 2. Inject Secrets using envsubst
-          envsubst < kubernetes/secrets.yml > kubernetes/secrets.yml.tmp
-          mv kubernetes/secrets.yml.tmp kubernetes/secrets.yml
 
       - name: Commit and push changes
         run: |
-          git add kubernetes/backend-deployment.yml kubernetes/frontend-deployment.yml kubernetes/secrets.yml
-          git commit -m "chore(k8s): update images to ${{ needs.docker.outputs.image_tag }} and refresh secrets [skip ci]" || echo "No changes to commit"
+          git add kubernetes/backend-deployment.yml kubernetes/frontend-deployment.yml
+          git commit -m "chore(k8s): update images to ${{ needs.docker.outputs.image_tag }} [skip ci]" || echo "No changes to commit"
           git push
