@@ -24,8 +24,9 @@ FROM node:20-alpine AS runner
 
 WORKDIR /app
 
-# Security: non-root user
-RUN addgroup -S nextgroup && adduser -S nextuser -G nextgroup
+# Security: non-root user and vulnerability patches
+RUN apk update && apk upgrade zlib && \
+    addgroup -S nextgroup && adduser -S nextuser -G nextgroup
 
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
