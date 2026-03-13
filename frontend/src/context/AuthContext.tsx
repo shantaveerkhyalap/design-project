@@ -34,7 +34,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         const userInfo = localStorage.getItem('userInfo');
 
         if (token && userInfo) {
-            setUser(JSON.parse(userInfo));
+            const parsedUser = JSON.parse(userInfo);
+            // Defer state update to avoid sync render warning
+            setTimeout(() => setUser(parsedUser), 0);
         }
         setLoading(false);
     }, []);

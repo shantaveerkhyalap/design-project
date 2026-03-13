@@ -87,7 +87,7 @@ export default function LoginPage() {
                 </Button>
 
                 <p className={styles.footer}>
-                    Don't have an account? <Link href="/signup">Sign Up</Link>
+                    Don&apos;t have an account? <Link href="/signup">Sign Up</Link>
                 </p>
             </Card>
         </div>

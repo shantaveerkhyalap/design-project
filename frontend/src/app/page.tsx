@@ -13,7 +13,8 @@ export default function Home() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const token = localStorage.getItem('token');
-      setIsLoggedIn(!!token);
+      // Defer state update to avoid sync render warning
+      setTimeout(() => setIsLoggedIn(!!token), 0);
     }
   }, []);
 

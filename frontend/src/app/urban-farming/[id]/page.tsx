@@ -11,13 +11,13 @@ import styles from './page.module.css';
 export default function UrbanDetail() {
     const params = useParams();
     const id = params.id as string;
-    const module = urbanModules.find(m => m.id === id);
+    const urbanModule = urbanModules.find(m => m.id === id);
     const [enrolled, setEnrolled] = useState(false);
     const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
 
-    if (!module) return notFound();
+    if (!urbanModule) return notFound();
 
-    const stepCount = module.steps.length;
+    const stepCount = urbanModule.steps.length;
     const completedCount = completedSteps.size;
     const progressPercent = stepCount > 0 ? Math.round((completedCount / stepCount) * 100) : 0;
 
@@ -41,14 +41,14 @@ export default function UrbanDetail() {
     return (
         <div className={styles.container}>
             {/* Hero Header */}
-            <header className={styles.header} style={{ backgroundImage: `linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.8)), url(${module.image})` }}>
+            <header className={styles.header} style={{ backgroundImage: `linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.8)), url(${urbanModule.image})` }}>
                 <div className={styles.headerContent}>
                     <span className={styles.badge}>Urban Tech</span>
-                    <h1 className={styles.title}>{module.title}</h1>
-                    <p className={styles.description}>{module.description}</p>
+                    <h1 className={styles.title}>{urbanModule.title}</h1>
+                    <p className={styles.description}>{urbanModule.description}</p>
 
                     <div className={styles.meta}>
-                        <div className={styles.metaItem}><Layers size={18} /> {module.steps.length} Steps</div>
+                        <div className={styles.metaItem}><Layers size={18} /> {urbanModule.steps.length} Steps</div>
                         <div className={styles.metaItem}><BookOpen size={18} /> Self-paced</div>
                     </div>
                 </div>
@@ -59,7 +59,7 @@ export default function UrbanDetail() {
                     <Card className={styles.section}>
                         <h2>About This Technique</h2>
                         <p>
-                            {module.description} This self-paced module walks you through every step —
+                            {urbanModule.description} This self-paced module walks you through every step —
                             from setup to your first harvest. Follow along and check off each step as you complete it.
                         </p>
                     </Card>
@@ -67,7 +67,7 @@ export default function UrbanDetail() {
                     <Card className={styles.section}>
                         <h2><GraduationCap size={22} style={{ marginRight: '0.5rem', verticalAlign: 'middle' }} />Steps to Follow</h2>
                         <ul className={styles.syllabus}>
-                            {module.steps.map((step, idx) => {
+                            {urbanModule.steps.map((step, idx) => {
                                 const isChecked = completedSteps.has(idx);
                                 return (
                                     <li key={idx} className={`${styles.syllabusItem} ${enrolled && isChecked ? styles.syllabusItemDone : ''}`}>

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/Button';
 import api from '@/lib/api';
-import { BookOpen, PlayCircle, CheckCircle } from 'lucide-react';
+import { PlayCircle, CheckCircle } from 'lucide-react';
 import styles from '@/app/modules/[id]/page.module.css'; // Reusing styles from detail page for consistency
 
 interface EnrollButtonProps {

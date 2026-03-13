@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Calculator, Sprout } from 'lucide-react';
+import { Calculator } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
 import styles from './CropCalculator.module.css';
