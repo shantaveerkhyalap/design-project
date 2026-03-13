@@ -33,7 +33,7 @@ spec:
       containers:
         - name: frontend
           # Image is updated automatically by the CI/CD pipeline
-          image: ghcr.io/GITHUB_REPOSITORY_PLACEHOLDER-frontend:latest
+          image: ghcr.io/shantaveerkhyalap/design-project-farming-frontend:sha-b2d73e4b327a7cba4d736e0a831eff4c91b885bb
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
