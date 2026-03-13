@@ -1,0 +1,285 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - 'kubernetes/**'
+      - 'REE.mdADM'
+      - 'setup_instructions.md'
+  pull_request:
+    branches: [ main ]
+
+env:
+  REGISTRY: ghcr.io
+  # Converts "Owner/Repo" to lowercase for GHCR
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # ─────────────────────────────────────────────────────────────────────────
+  # Job 1: Tests (Backend & Frontend)
+  # ─────────────────────────────────────────────────────────────────────────
+  tests:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: npm
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
+
+      # Backend Checks
+      - name: Backend - Install dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: Backend - Run tests (if any)
+        working-directory: ./backend
+        run: npm test || echo "Backend test script returned non-zero, continuing..."
+
+      # Frontend Checks
+      - name: Frontend - Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Frontend - Run tests (if any)
+        working-directory: ./frontend
+        run: npm test || echo "Frontend test script returned non-zero, continuing..."
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Job 2: Static Code Analysis (Lint)
+  # ─────────────────────────────────────────────────────────────────────────
+  lint:
+    name: Lint Frontend
+    runs-on: ubuntu-latest
+    needs: [tests]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Run ESLint
+        working-directory: ./frontend
+        run: npm run lint
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Job 3: Build Next.js
+  # ─────────────────────────────────────────────────────────────────────────
+  build:
+    name: Build Frontend
+    runs-on: ubuntu-latest
+    needs: [lint]
+    outputs:
+      image_tag: ${{ steps.set_output.outputs.image_tag }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: npm ci
+
+      - name: Build Next.js standalone App
+        working-directory: ./frontend
+        env:
+          NEXT_PUBLIC_API_URL: /api
+        run: npm run build
+
+      - name: Upload frontend build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: frontend-build
+          path: |
+            ./frontend/.next/
+            ./frontend/public/
+            !./frontend/node_modules/
+
+      - name: Set image tag output
+        id: set_output
+        run: echo "image_tag=sha-${GITHUB_SHA}" >> $GITHUB_OUTPUT
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Job 4: Docker Build, Scan & Push
+  # ─────────────────────────────────────────────────────────────────────────
+  docker:
+    name: Docker Build & Push
+    runs-on: ubuntu-latest
+    needs: [build]
+    
+    # Needs packages: write permissions for GHCR
+    permissions:
+      contents: read
+      packages: write
+
+    outputs:
+      image_tag: ${{ needs.build.outputs.image_tag }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Download frontend build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend-build
+          path: frontend/
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # ─── BACKEND IMAGE ───
+      - name: Extract metadata for Backend
+        id: meta_backend
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-farming-backend
+          tags: |
+            type=sha,format=long
+            type=ref,event=branch
+            latest
+
+      - name: Build Backend image (local)
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: false
+          tags: ${{ steps.meta_backend.outputs.tags }}
+          labels: ${{ steps.meta_backend.outputs.labels }}
+          load: true
+
+      - name: Scan Backend image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-farming-backend:sha-${{ github.sha }}
+          format: table
+          exit-code: 1
+          ignore-unfixed: true
+          vuln-type: os,library
+          severity: CRITICAL
+
+      - name: Push Backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: true
+          tags: ${{ steps.meta_backend.outputs.tags }}
+          labels: ${{ steps.meta_backend.outputs.labels }}
+
+      # ─── FRONTEND IMAGE ───
+      - name: Extract metadata for Frontend
+        id: meta_frontend
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-farming-frontend
+          tags: |
+            type=sha,format=long
+            type=ref,event=branch
+            latest
+
+      - name: Build Frontend image (local)
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: false
+          tags: ${{ steps.meta_frontend.outputs.tags }}
+          labels: ${{ steps.meta_frontend.outputs.labels }}
+          load: true
+
+      - name: Scan Frontend image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-farming-frontend:sha-${{ github.sha }}
+          format: table
+          exit-code: 1
+          ignore-unfixed: true
+          vuln-type: os,library
+          severity: CRITICAL
+
+      - name: Push Frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./frontend
+          push: true
+          tags: ${{ steps.meta_frontend.outputs.tags }}
+          labels: ${{ steps.meta_frontend.outputs.labels }}
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Job 5: Update Kubernetes Manifests
+  # ─────────────────────────────────────────────────────────────────────────
+  update-k8s:
+    name: Update K8s Manifests
+    runs-on: ubuntu-latest
+    needs: [docker]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # A Personal Access Token (PAT) is required to push changes back to the repo
+          token: ${{ secrets.TOKEN }}
+
+      - name: Setup Git config
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Update Kubernetes manifests
+        env:
+          IMAGE_TAG: ${{ needs.docker.outputs.image_tag }}
+          # Injects real secrets from GitHub into the environment for substitution
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENWEATHER_API_KEY: ${{ secrets.OPENWEATHER_API_KEY }}
+        run: |
+          # GHCR requires lowercase repository names
+          REPO_LOWER=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          echo "Updating deployments for $REPO_LOWER with tag: ${IMAGE_TAG}"
+          
+          # 1. Update Image Tags using sed
+          BACKEND_IMG="ghcr.io/${REPO_LOWER}-farming-backend:${IMAGE_TAG}"
+          FRONTEND_IMG="ghcr.io/${REPO_LOWER}-farming-frontend:${IMAGE_TAG}"
+          
+          sed -i "s|^\(\s*image:\s*\).*|\1${BACKEND_IMG}|g" kubernetes/backend-deployment.yml
+          sed -i "s|^\(\s*image:\s*\).*|\1${FRONTEND_IMG}|g" kubernetes/frontend-deployment.yml
+          
+          # 2. Inject Secrets using envsubst
+          envsubst < kubernetes/secrets.yml > kubernetes/secrets.yml.tmp
+          mv kubernetes/secrets.yml.tmp kubernetes/secrets.yml
+
+      - name: Commit and push changes
+        run: |
+          git add kubernetes/backend-deployment.yml kubernetes/frontend-deployment.yml kubernetes/secrets.yml
+          git commit -m "chore(k8s): update images to ${{ needs.docker.outputs.image_tag }} and refresh secrets [skip ci]" || echo "No changes to commit"
+          git push

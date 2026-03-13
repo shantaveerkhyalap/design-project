@@ -1,0 +1,291 @@
+/* Module Detail Styles */
+.container {
+    min-height: 100vh;
+    background-color: #f8f9fa;
+}
+
+.header {
+    position: relative;
+    /* Image set inline */
+    background-size: cover;
+    background-position: center;
+    padding: 8rem 2rem 6rem;
+    text-align: center;
+    color: #ffffff;
+}
+
+/* Add a pseudo-element for a better overlay that ensures text readability */
+.header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* Much darker gradient for maximum contrast */
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.95));
+    z-index: 1;
+}
+
+.headerContent {
+    position: relative;
+    z-index: 2;
+    max-width: 850px;
+    margin: 0 auto;
+    /* Subtle backing to guarantee readability on chaotic images */
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(8px);
+    padding: 2rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.badge {
+    display: inline-block;
+    background: var(--color-accent);
+    color: #0f1c15;
+    /* Dark green for contrast against the accent color */
+    font-weight: 800;
+    font-size: 0.9rem;
+    padding: 0.5rem 1.25rem;
+    border-radius: 30px;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.title {
+    font-size: 4.5rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+    line-height: 1.1;
+    color: #ffffff;
+    text-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+    letter-spacing: -0.02em;
+}
+
+.sciName {
+    color: rgba(255, 255, 255, 1);
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+    font-style: italic;
+    font-weight: 400;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.description {
+    font-size: 1.35rem;
+    color: #ffffff;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 500;
+}
+
+.meta {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    color: #ffffff;
+}
+
+.metaItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    padding: 0.75rem 1.5rem;
+    border-radius: 30px;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.statsRow {
+    display: flex;
+    justify-content: center;
+    gap: 4rem;
+    padding: 2.5rem;
+    background: #ffffff;
+    border-bottom: 1px solid #eaeaea;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    position: relative;
+    z-index: 5;
+    margin-top: -2rem;
+    /* Overlap header slightly if desired, or just sit below */
+    border-radius: 20px 20px 0 0;
+    max-width: 1000px;
+    margin: -3rem auto 0;
+}
+
+.statItem {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: #4a5568;
+    font-weight: 600;
+    text-align: center;
+}
+
+.statItem span {
+    font-size: 0.95rem;
+}
+
+.statIcon {
+    color: var(--color-primary);
+    background: #e6f4ea;
+    padding: 8px;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    /* Reset width/height for icon inside */
+    box-sizing: content-box;
+    /* Lucid icons usually need distinct sizing, let's just color the icon */
+    /* Actually better to keep simple sizing */
+    width: auto;
+    height: auto;
+    padding: 0;
+    background: none;
+    width: 32px;
+    height: 32px;
+}
+
+.content {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 4rem 2rem;
+}
+
+.section {
+    margin-bottom: 2.5rem;
+    border: none;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.section h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #f0f0f0;
+    padding-bottom: 0.75rem;
+    color: #1a202c;
+}
+
+.section p {
+    color: #4a5568;
+    line-height: 1.8;
+    font-size: 1.05rem;
+}
+
+.syllabus {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.syllabus li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid #f0f0f0;
+    transition: background-color 0.2s;
+}
+
+.syllabus li:hover {
+    background-color: #fafafa;
+    padding-left: 0.5rem;
+    /* subtle nudge */
+    border-radius: 8px;
+}
+
+.syllabus li:last-child {
+    border-bottom: none;
+}
+
+.check {
+    color: var(--color-primary);
+    flex-shrink: 0;
+}
+
+.duration {
+    margin-left: auto;
+    font-size: 0.85rem;
+    color: #718096;
+    background: #edf2f7;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    white-space: nowrap;
+    font-weight: 500;
+}
+
+.enrollCard {
+    position: sticky;
+    top: 100px;
+    text-align: center;
+    border: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    /* Stronger shadow */
+    padding: 2rem;
+}
+
+.enrollCard h3 {
+    margin-bottom: 0.75rem;
+    font-size: 1.5rem;
+    color: #1a202c;
+}
+
+.enrollCard p {
+    margin-bottom: 2rem;
+    color: #718096;
+}
+
+.fullBtn {
+    width: 100%;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.enrollMeta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #718096;
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .content {
+        grid-template-columns: 1fr;
+        padding: 2rem 1rem;
+    }
+
+    .header {
+        padding: 6rem 1rem 4rem;
+    }
+
+    .title {
+        font-size: 2.75rem;
+    }
+
+    .statsRow {
+        flex-direction: column;
+        gap: 1.5rem;
+        align-items: center;
+        margin-top: 0;
+        border-radius: 0;
+        width: 100%;
+        max-width: none;
+    }
+}

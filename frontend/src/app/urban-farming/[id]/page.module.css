@@ -1,0 +1,231 @@
+.container {
+    min-height: 100vh;
+}
+
+.header {
+    position: relative;
+    text-align: center;
+    padding: 5rem 2rem 4rem;
+    background-size: cover;
+    background-position: center;
+    color: #fff;
+}
+
+.headerContent {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.badge {
+    display: inline-block;
+    background: rgba(45, 106, 79, 0.9);
+    color: #fff !important;
+    font-size: 0.8rem;
+    padding: 0.35rem 1.25rem;
+    border-radius: 20px;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+}
+
+.title {
+    font-size: 3rem;
+    color: #fff !important;
+    margin-bottom: 0.5rem;
+}
+
+.description {
+    font-size: 1.15rem;
+    color: rgba(255, 255, 255, 0.9) !important;
+    max-width: 600px;
+    margin: 0 auto 1.5rem;
+    line-height: 1.6;
+}
+
+.meta {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    color: #ffffff !important;
+}
+
+.metaItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    color: #ffffff !important;
+}
+
+/* Content Layout */
+.content {
+    display: grid;
+    grid-template-columns: 1fr 320px;
+    gap: 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.section {
+    margin-bottom: 1.5rem;
+    padding: 2rem;
+}
+
+.section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #111827 !important;
+}
+
+.section p {
+    color: #1a1a1a !important;
+    line-height: 1.6;
+}
+
+/* Syllabus / Steps */
+.syllabus {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.syllabusItem {
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.syllabusItem:last-child {
+    border-bottom: none;
+}
+
+.syllabusHeader {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+}
+
+.stepNumber {
+    display: inline-block;
+    background: var(--color-primary);
+    color: #fff !important;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    margin-right: 0.5rem;
+    text-transform: uppercase;
+}
+
+.stepText {
+    font-weight: 500;
+    color: #111827 !important;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.stepTextDone {
+    text-decoration: line-through;
+    color: #888 !important;
+}
+
+.stepCheckbox {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--color-primary);
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+}
+
+.syllabusItemDone {
+    opacity: 0.6;
+}
+
+.check {
+    color: var(--color-primary-light);
+    margin-top: 0.15rem;
+    flex-shrink: 0;
+}
+
+/* Enroll Card */
+.enrollCard {
+    position: sticky;
+    top: 100px;
+    text-align: center;
+}
+
+.enrollCard h3 {
+    font-size: 1.5rem;
+}
+
+.enrollCard p {
+    margin-bottom: 1.5rem;
+    color: #1a1a1a !important;
+}
+
+.fullBtn {
+    width: 100%;
+}
+
+.enrollMeta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #1a1a1a !important;
+    margin-top: 1rem;
+}
+
+.enrolledBadge {
+    display: inline-block;
+    background: #d4edda;
+    color: #155724 !important;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 0.4rem 1.2rem;
+    border-radius: 20px;
+    margin-bottom: 0.75rem;
+}
+
+.progressBar {
+    width: 100%;
+    height: 8px;
+    background: #e9ecef;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+}
+
+.progressFill {
+    height: 100%;
+    background: var(--color-primary);
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.progressText {
+    font-size: 0.85rem;
+    color: #374151 !important;
+    margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+    .content {
+        grid-template-columns: 1fr;
+    }
+
+    .title {
+        font-size: 2rem;
+    }
+
+    .meta {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+    }
+}

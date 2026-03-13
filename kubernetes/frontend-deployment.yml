@@ -1,0 +1,106 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Frontend — Deployment & ClusterIP Service
+# Next.js (standalone) served on port 3000
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── Deployment ────────────────────────────────────────────────────────────────
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  namespace: virtual-farming
+  labels:
+    app: frontend
+    app.kubernetes.io/name: virtual-farming
+    app.kubernetes.io/component: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      terminationGracePeriodSeconds: 30
+
+      containers:
+        - name: frontend
+          # Image is updated automatically by the CI/CD pipeline
+          image: ghcr.io/GITHUB_REPOSITORY_PLACEHOLDER-frontend:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+              name: http
+
+          # ── Environment Variables ──────────────────────────────────────
+          env:
+            - name: NODE_ENV
+              valueFrom:
+                configMapKeyRef:
+                  name: virtual-farming-config
+                  key: NODE_ENV
+            - name: PORT
+              value: "3000"
+            # Backend API URL accessible from the browser (via Ingress)
+            - name: NEXT_PUBLIC_API_URL
+              value: "/api"
+
+          # ── Resource Limits ────────────────────────────────────────────
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+
+          # ── Health Probes ──────────────────────────────────────────────
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 25
+            periodSeconds: 15
+            timeoutSeconds: 5
+            failureThreshold: 3
+
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+
+      imagePullSecrets:
+        - name: ghcr-pull-secret
+
+---
+
+# ── Service (ClusterIP) ───────────────────────────────────────────────────────
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+  namespace: virtual-farming
+  labels:
+    app: frontend
+    app.kubernetes.io/name: virtual-farming
+    app.kubernetes.io/component: frontend
+spec:
+  type: NodePort
+  selector:
+    app: frontend
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 3000

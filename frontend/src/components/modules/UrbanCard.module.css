@@ -1,0 +1,117 @@
+.card {
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+}
+
+/* Image */
+.imageContainer {
+    position: relative;
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+}
+
+.image {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+}
+
+/* Badge */
+.badge {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    background-color: #2E7D32;
+    color: white;
+    padding: 5px 14px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    z-index: 2;
+}
+
+/* Content */
+.content {
+    padding: 20px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 8px 0;
+    line-height: 1.35;
+}
+
+.description {
+    font-size: 0.88rem;
+    color: #555;
+    line-height: 1.55;
+    margin: 0 0 20px 0;
+    flex-grow: 1;
+}
+
+/* Meta row */
+.metaRow {
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    margin-bottom: 18px;
+    color: #444;
+    font-size: 0.82rem;
+    font-weight: 500;
+}
+
+.metaItem {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Button */
+.buttonLink {
+    display: block;
+    text-decoration: none;
+}
+
+.button {
+    width: 100%;
+    padding: 10px 0;
+    border: 1.5px solid #2E7D32;
+    background: transparent;
+    color: #2E7D32;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.button:hover {
+    background: #2E7D32;
+    color: white;
+}
+
+.button.completed {
+    background: #f0fdf4;
+    border-color: #16a34a;
+    color: #16a34a;
+}

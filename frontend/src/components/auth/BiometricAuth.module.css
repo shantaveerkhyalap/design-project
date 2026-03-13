@@ -1,0 +1,97 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+}
+
+.iconContainer {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(45, 106, 79, 0.1);
+    /* Lighter green tint */
+    border-radius: 50%;
+    margin-bottom: 2rem;
+    overflow: hidden;
+    border: 1px solid rgba(82, 183, 136, 0.2);
+}
+
+.icon {
+    color: var(--color-primary-light);
+    transition: all 0.3s ease;
+}
+
+.success {
+    color: var(--color-accent);
+}
+
+.scanLine {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--color-accent);
+    box-shadow: 0 0 10px var(--color-accent);
+    animation: scan 1.5s linear infinite;
+}
+
+.title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-text-main);
+}
+
+.instruction {
+    color: var(--color-text-muted);
+    margin-bottom: 2rem;
+}
+
+.scanButton {
+    min-width: 200px;
+}
+
+.altLogin {
+    margin-top: 2rem;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.altLogin:hover {
+    color: var(--color-primary-light);
+}
+
+@keyframes scan {
+    0% {
+        top: 0;
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 1;
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        top: 100%;
+        opacity: 0;
+    }
+}
+
+.scanning {
+    opacity: 0.8;
+}

@@ -1,0 +1,55 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Ingress — Nginx Ingress Controller
+# Routes external traffic to frontend & backend services
+# ─────────────────────────────────────────────────────────────────────────────
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: virtual-farming-ingress
+  namespace: virtual-farming
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    # Proxy body size limited to 50m for uploads
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    # Enable proxy buffering and set buffer sizes
+    nginx.ingress.kubernetes.io/proxy-buffering: "on"
+    nginx.ingress.kubernetes.io/proxy-buffer-size: "16k"
+    # SSL Redirect
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    # CORS
+    nginx.ingress.kubernetes.io/enable-cors: "true"
+spec:
+  # TLS Configuration (Uncomment and configure if you have a cert manager setup)
+  # tls:
+  #   - hosts:
+  #       - your-domain.com
+  #     secretName: virtual-farming-tls-cert
+  rules:
+    - http:
+        paths:
+          # ─── API Routes (handled by Backend) ───────────────────────────
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-service
+                port:
+                  number: 5000
+
+          # ─── Uploads (handled by Backend) ──────────────────────────────
+          - path: /uploads
+            pathType: Prefix
+            backend:
+              service:
+                name: backend-service
+                port:
+                  number: 5000
+
+          # ─── default (handled by Frontend) ─────────────────────────────
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: frontend-service
+                port:
+                  number: 80

@@ -1,0 +1,138 @@
+.container {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    max-width: 400px;
+    font-family: 'Inter', sans-serif;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    color: #1a202c;
+}
+
+.header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.header svg {
+    color: #2f855a;
+    /* Green icon color */
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.inputRow {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.input {
+    flex: 2;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 1rem;
+    color: #2d3748;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.input:focus {
+    border-color: #2f855a;
+    box-shadow: 0 0 0 1px #2f855a;
+}
+
+.select {
+    flex: 1;
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background-color: #f7fafc;
+    font-size: 0.875rem;
+    color: #2d3748;
+    outline: none;
+    cursor: pointer;
+}
+
+.button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #52b788;
+    /* Green button */
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 1rem;
+}
+
+.button:hover {
+    background-color: #40916c;
+}
+
+.button:disabled {
+    background-color: #a0aec0;
+    cursor: not-allowed;
+}
+
+.result {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid #f6ad55;
+    /* Orange/Gold line from image */
+}
+
+.resultRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* Align items vertically */
+    margin-bottom: 0.75rem;
+    font-size: 0.9rem;
+}
+
+.resultLabel {
+    color: #718096;
+    font-weight: 500;
+}
+
+.resultValue {
+    font-weight: 700;
+    color: #2d3748;
+    text-align: right;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+    color: #2f855a;
+}
+
+.error {
+    margin-top: 1rem;
+    color: #e53e3e;
+    font-size: 0.875rem;
+    text-align: center;
+}

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: virtual-farming
+  labels:
+    app.kubernetes.io/name: virtual-farming
+    app.kubernetes.io/managed-by: github-actions
