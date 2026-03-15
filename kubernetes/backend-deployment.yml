@@ -34,7 +34,7 @@ spec:
       containers:
         - name: backend
           # Image is updated automatically by the CI/CD pipeline
-          image: ghcr.io/shantaveerkhyalap/design-project-farming-backend:sha-824af8e1c9ba11094aff2e07e1cc6b4297ddcd3d
+          image: ghcr.io/shantaveerkhyalap/design-project-farming-backend:sha-d0bcb8066a7aa829e599b40703d304be81a9f3ba
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
