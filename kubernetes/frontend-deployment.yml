@@ -33,7 +33,7 @@ spec:
       containers:
         - name: frontend
           # Image is updated automatically by the CI/CD pipeline
-          image: ghcr.io/shantaveerkhyalap/design-project-farming-frontend:sha-b2d73e4b327a7cba4d736e0a831eff4c91b885bb
+          image: ghcr.io/shantaveerkhyalap/design-project-farming-frontend:sha-824af8e1c9ba11094aff2e07e1cc6b4297ddcd3d
           imagePullPolicy: Always
           ports:
             - containerPort: 3000
